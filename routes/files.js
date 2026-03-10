@@ -38,7 +38,7 @@ router.post('/', async (req, res) => {
     if (exists) {
       return res.status(409).json({ error: 'Файл з такою назвою вже існує' });
     }
-    const file = await writeFile(name, content || '');
+    const file = await writeFile(name, content || '', req.body.fontSize);
     res.status(201).json(file);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -52,8 +52,8 @@ router.put('/:name', async (req, res) => {
     if (!exists) {
       return res.status(404).json({ error: 'Файл не знайдено' });
     }
-    const { content } = req.body;
-    const file = await writeFile(req.params.name, content || '');
+    const { content, fontSize } = req.body;
+    const file = await writeFile(req.params.name, content || '', fontSize);
     res.json(file);
   } catch (err) {
     res.status(500).json({ error: err.message });
